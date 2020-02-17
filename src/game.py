@@ -42,6 +42,7 @@ def generate_words():
         if is_good_length and is_noun and not is_dup and is_in_model:
             color = get_color(len(words))
             words.append(Word(string, color))
+            strings.append(string)
 
     random.shuffle(words)
     return words
@@ -80,7 +81,7 @@ class Game():
     def get_user_guess(self):
         guess = input("Guess: ")
         print()
-        if guess == PASS or guess == DEBUG:
+        if guess == PASS or guess == DEBUG or guess == RESET:
             return guess
 
         if guess not in self.get_word_strings():
@@ -128,7 +129,7 @@ class Game():
 
         # Get hint
         hint_word, num_hinted_words, hint_score, target_words = self.code_master.give_hint(player_color)
-        self.hints.append((hint_score, target_words))
+        self.hints.append((hint_word, hint_score, target_words))
 
         # Let user guess
         num_guesses = num_hinted_words + 1
@@ -146,7 +147,7 @@ class Game():
 
             # Handle guess
             if guess == RESET:
-                return True
+                return GREEN
 
             if guess == DEBUG:
                 print(f"DEBUG: score: {hint_score}, words: {target_words}")
