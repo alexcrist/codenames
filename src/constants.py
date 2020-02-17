@@ -23,3 +23,4 @@ ROW_PADDING = 1
 
 PASS = "/pass"
 DEBUG = "/debug"
+RESET = "/reset"

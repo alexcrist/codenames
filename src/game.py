@@ -145,6 +145,9 @@ class Game():
             guess = self.get_user_guess()
 
             # Handle guess
+            if guess == RESET:
+                return True
+
             if guess == DEBUG:
                 print(f"DEBUG: score: {hint_score}, words: {target_word_1} {target_word_2}")
                 continue
@@ -159,4 +162,6 @@ class Game():
             winner = self.is_game_over()
             if winner != False:
                 pprint(self.hints)
-            return winner
+                return winner
+
+        return False
