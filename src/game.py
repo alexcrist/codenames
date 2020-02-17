@@ -2,8 +2,9 @@ from nltk import pos_tag
 import random
 import sys
 
-from Word import Word
-from model import all_vec_words, num_vec_words
+from code_master import CodeMaster
+from word import Word
+from models import lee_model, all_lee_words, num_lee_words
 from constants import *
 from text_formatters import colorizer_map
 
@@ -28,8 +29,8 @@ def generate_words():
     strings = []
 
     while len(words) < NUM_WORDS:
-        index = random.randint(0, num_vec_words)
-        string = all_vec_words[index]
+        index = random.randint(0, num_lee_words)
+        string = all_lee_words[index]
         tags = pos_tag([string])
 
         is_good_length = len(string) > 3 and len(string) < 10
@@ -54,6 +55,7 @@ class Game():
         red_words = []
         blue_words = []
         bad_words = []
+
         for word in self.words:
             if word.color == RED:
                 red_words.append(word.string)
@@ -61,15 +63,21 @@ class Game():
                 blue_words.append(word.string)
             else:
                 bad_words.append(word.string)
-         # TODO: self.brain = Brain(red_words, blue_words, bad_words)
+
+        # self.code_master = CodeMaster(
+        #     red_words,
+        #     blue_words,
+        #     bad_words,
+        #     model = lee_model
+        # )
 
     def get_word_strings(self):
         return list(map(lambda word: word.string, self.words))
 
     def get_user_guess(self):
-        guess = input()
+        guess = input("Guess: ")
         if guess not in self.get_word_strings():
-            print("Invalid guess. Try again.")
+            print("Invalid guess. Try again.", flush=True)
             return self.get_user_guess()
         return guess
 
@@ -81,23 +89,24 @@ class Game():
                 word_index = i * NUM_COLUMNS + j
                 word = self.words[word_index]
                 row += str(word)
-            print(row + row_padding)
+            print(row + row_padding, flush=True)
 
     def print_player(self, player_color):
         colorizer = colorizer_map[player_color]
         player = colorizer(player_color.upper())
-        print("Player: {}".format(player))
+        print("Player: {}".format(player), flush=True)
 
     def guess_word(self, guess, player_color):
         for word in self.words:
             if word.string == guess:
-                word.guess()
+                word.set_to_guessed()
+                # self.code_master.set_word_to_guessed(word)
                 return word.color == player_color
 
     def give_hint(self, player_color):
 
         # Get hint
-        # TODO: hint_word, num_hinted_words = self.brain.give_hint()
+        # TODO: hint_word, num_hinted_words, *_ = self.code_master.give_hint(player_color)
         hint_word, num_hinted_words = "yote", 2
 
         # Let user guess
@@ -107,8 +116,8 @@ class Game():
             # Print board state
             sys.stdout.flush()
             self.print_player(player_color)
-            print("Hint: {}".format(hint_word))
-            print("Remaining guess: {}\n".format(num_guesses - i))
+            print("Hint: {}".format(hint_word), flush=True)
+            print("Remaining guess: {}\n".format(num_guesses - i), flush=True)
             self.print_board_state()
 
             # Get user guess

@@ -1,8 +1,7 @@
-from model import model
 from pprint import pprint
 from itertools import combinations
+from gensim.models import KeyedVectors
 import editdistance
-import gensim
 
 class CodeMaster:
     ''' A robo code master in the Codenames game '''
