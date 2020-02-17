@@ -2,6 +2,7 @@ from pprint import pprint
 from itertools import combinations
 from gensim.models import KeyedVectors
 import editdistance
+from string import ascii_letters
 
 class CodeMaster:
     ''' A robo code master in the Codenames game '''
@@ -76,14 +77,13 @@ class CodeMaster:
         words = [(w.lower(), n) for w, n in words]
 
         exclude_substrings = True
-        banned_chars = ["_", "#", ".", "/"]
         if exclude_substrings:
             input_words = kwargs["positive"]
-            words = [  # Todo drop edit distance <=2
+            words = [
                 (w.lower(), round(n, 3))
                 for w, n in words
                 if not (
-                        any(c in w for c in banned_chars) or
+                        any(c not in ascii_letters for c in w) or
                         any(w in i_w for i_w in input_words) or
                         any(i_w in w for i_w in input_words) or
                         any(editdistance.eval(w, i_w) <= 3 for i_w in input_words)
