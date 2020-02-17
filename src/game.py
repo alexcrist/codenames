@@ -76,8 +76,9 @@ class Game():
 
     def get_user_guess(self):
         guess = input("Guess: ")
+        print()
         if guess not in self.get_word_strings():
-            print("Invalid guess. Try again.", flush=True)
+            print("Invalid guess. Try again.")
             return self.get_user_guess()
         return guess
 
@@ -89,12 +90,12 @@ class Game():
                 word_index = i * NUM_COLUMNS + j
                 word = self.words[word_index]
                 row += str(word)
-            print(row + row_padding, flush=True)
+            print(row + row_padding)
 
     def print_player(self, player_color):
         colorizer = colorizer_map[player_color]
         player = colorizer(player_color.upper())
-        print("Player: {}".format(player), flush=True)
+        print("Player: {}".format(player))
 
     def guess_word(self, guess, player_color):
         for word in self.words:
@@ -116,8 +117,8 @@ class Game():
             # Print board state
             sys.stdout.flush()
             self.print_player(player_color)
-            print("Hint: {}".format(hint_word), flush=True)
-            print("Remaining guess: {}\n".format(num_guesses - i), flush=True)
+            print("Hint: {}".format(hint_word))
+            print("Remaining guess: {}\n".format(num_guesses - i))
             self.print_board_state()
 
             # Get user guess
