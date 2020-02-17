@@ -127,8 +127,8 @@ class Game():
     def give_hint(self, player_color):
 
         # Get hint
-        hint_word, num_hinted_words, hint_score, (target_word_1, target_word_2) = self.code_master.give_hint(player_color)
-        self.hints.append((hint_score, target_word_1, target_word_2))
+        hint_word, num_hinted_words, hint_score, target_words = self.code_master.give_hint(player_color)
+        self.hints.append((hint_score, target_words))
 
         # Let user guess
         num_guesses = num_hinted_words + 1
@@ -146,7 +146,7 @@ class Game():
 
             # Handle guess
             if guess == DEBUG:
-                print(f"DEBUG: score: {hint_score}, words: {target_word_1} {target_word_2}")
+                print(f"DEBUG: score: {hint_score}, words: {target_words}")
                 continue
 
             elif guess == PASS:
@@ -156,7 +156,7 @@ class Game():
             if not is_guess_correct:
                 break
 
-            winner = self.is_game_over()
-            if winner != False:
-                pprint(self.hints)
-            return winner
+        winner = self.is_game_over()
+        if winner != False:
+            pprint(self.hints)
+        return winner
