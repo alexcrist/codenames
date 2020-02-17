@@ -1,11 +1,19 @@
 from game import Game
 from constants import *
-
-game = Game()
-players = [RED, BLUE]
-turn_index = 0
+from text_formatters import colorizer_map
 
 while True:
-    player = players[turn_index]
-    game.give_hint(player)
-    turn_index = (turn_index + 1) % 2
+    game = Game()
+    players = [RED, BLUE]
+    turn_index = 0
+
+    while True:
+        player = players[turn_index]
+        winner = game.give_hint(player)
+
+        if winner != False:
+            colorize = colorizer_map[winner]
+            print(colorize(f"{winner.upper()} WINS!\n\n"))
+            break
+
+        turn_index = (turn_index + 1) % 2

@@ -1,4 +1,5 @@
 from nltk import pos_tag
+from pprint import pprint
 import random
 import sys
 
@@ -51,6 +52,7 @@ class Game():
     def __init__(self):
         self.words = generate_words()
         self.brain = self.init_brain()
+        self.hints = []
 
     def init_brain(self):
         red_words = []
@@ -108,11 +110,25 @@ class Game():
                 self.code_master.set_word_to_guessed(word.string)
                 return word.color == player_color
 
+    def is_game_over(self):
+        blue_guesses = 0
+        red_guesses = 0
+        for word in self.words:
+            if word.color == BLUE and word.has_been_guessed:
+                blue_guesses += 1
+            if word.color == RED and word.has_been_guessed:
+                red_guesses += 1
+        if blue_guesses == NUM_BLUE_WORDS:
+            return BLUE
+        elif red_guesses == NUM_RED_WORDS:
+            return RED
+        return False
+
     def give_hint(self, player_color):
 
         # Get hint
         hint_word, num_hinted_words, hint_score, (target_word_1, target_word_2) = self.code_master.give_hint(player_color)
-        # hint_word, num_hinted_words = "yote", 2
+        self.hints.append((hint_score, target_word_1, target_word_2))
 
         # Let user guess
         num_guesses = num_hinted_words + 1
@@ -121,7 +137,7 @@ class Game():
             # Print board state
             sys.stdout.flush()
             self.print_player(player_color)
-            print("Hint: {}".format(hint_word))
+            print("Hint: {}".format(hint_word), hint_score)
             print("Remaining guess: {}\n".format(num_guesses - i))
             self.print_board_state()
 
@@ -139,3 +155,8 @@ class Game():
             is_guess_correct = self.guess_word(guess, player_color)
             if not is_guess_correct:
                 break
+
+            winner = self.is_game_over()
+            if winner != False:
+                pprint(self.hints)
+            return winner
