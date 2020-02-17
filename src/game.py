@@ -64,12 +64,12 @@ class Game():
             else:
                 bad_words.append(word.string)
 
-        # self.code_master = CodeMaster(
-        #     red_words,
-        #     blue_words,
-        #     bad_words,
-        #     model = lee_model
-        # )
+        self.code_master = CodeMaster(
+            red_words,
+            blue_words,
+            bad_words,
+            model = lee_model
+        )
 
     def get_word_strings(self):
         return list(map(lambda word: word.string, self.words))
@@ -101,14 +101,14 @@ class Game():
         for word in self.words:
             if word.string == guess:
                 word.set_to_guessed()
-                # self.code_master.set_word_to_guessed(word)
+                self.code_master.set_word_to_guessed(word)
                 return word.color == player_color
 
     def give_hint(self, player_color):
 
         # Get hint
-        # TODO: hint_word, num_hinted_words, *_ = self.code_master.give_hint(player_color)
-        hint_word, num_hinted_words = "yote", 2
+        hint_word, num_hinted_words, *_ = self.code_master.give_hint(player_color)
+        # hint_word, num_hinted_words = "yote", 2
 
         # Let user guess
         num_guesses = num_hinted_words + 1
