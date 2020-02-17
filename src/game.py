@@ -4,7 +4,7 @@ import sys
 
 from code_master import CodeMaster
 from word import Word
-from models import lee_model, all_lee_words, num_lee_words
+from models import google_model, all_lee_words, num_lee_words
 from constants import *
 from text_formatters import colorizer_map
 
@@ -36,8 +36,9 @@ def generate_words():
         is_good_length = len(string) > 3 and len(string) < 10
         is_noun = tags[0][1] == "NN"
         is_dup = string in strings
+        is_in_model = string in google_model.wv
 
-        if is_good_length and is_noun and not is_dup:
+        if is_good_length and is_noun and not is_dup and is_in_model:
             color = get_color(len(words))
             words.append(Word(string, color))
 
@@ -68,7 +69,7 @@ class Game():
             red_words,
             blue_words,
             bad_words,
-            model = lee_model
+            model = google_model
         )
 
     def get_word_strings(self):
@@ -101,7 +102,7 @@ class Game():
         for word in self.words:
             if word.string == guess:
                 word.set_to_guessed()
-                self.code_master.set_word_to_guessed(word)
+                self.code_master.set_word_to_guessed(word.string)
                 return word.color == player_color
 
     def give_hint(self, player_color):
