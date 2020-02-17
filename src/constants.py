@@ -18,3 +18,8 @@ BLACK = "black"
 
 WORD_WIDTH  = 15
 ROW_PADDING = 1
+
+# Commands
+
+PASS = "/pass"
+DEBUG = "/debug"

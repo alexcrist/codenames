@@ -78,6 +78,9 @@ class Game():
     def get_user_guess(self):
         guess = input("Guess: ")
         print()
+        if guess == PASS or guess == DEBUG:
+            return guess
+
         if guess not in self.get_word_strings():
             print("Invalid guess. Try again.")
             return self.get_user_guess()
@@ -108,7 +111,7 @@ class Game():
     def give_hint(self, player_color):
 
         # Get hint
-        hint_word, num_hinted_words, *_ = self.code_master.give_hint(player_color)
+        hint_word, num_hinted_words, hint_score, (target_word_1, target_word_2) = self.code_master.give_hint(player_color)
         # hint_word, num_hinted_words = "yote", 2
 
         # Let user guess
@@ -124,6 +127,15 @@ class Game():
 
             # Get user guess
             guess = self.get_user_guess()
+
+            # Handle guess
+            if guess == DEBUG:
+                print(f"DEBUG: score: {hint_score}, words: {target_word_1} {target_word_2}")
+                continue
+
+            elif guess == PASS:
+                break
+
             is_guess_correct = self.guess_word(guess, player_color)
             if not is_guess_correct:
                 break
