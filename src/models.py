@@ -3,7 +3,7 @@ from gensim.test.utils import datapath
 from gensim import utils
 import gensim.models
 
-SHOULD_LOAD_GOOGLE_MODEL = False
+SHOULD_LOAD_GOOGLE_MODEL = True
 SHOULD_LOAD_LEE_MODEL = True
 
 GOOGLE_PATH = './models/GoogleNews-vectors-negative300.bin'
@@ -19,7 +19,7 @@ class Corpus():
 
 if SHOULD_LOAD_GOOGLE_MODEL:
   print("Loading GoogleNews Word2Vec model...")
-  google_model = KeyedVectors.load_word2vec_format(MODEL_PATH, binary=True)
+  google_model = KeyedVectors.load_word2vec_format(GOOGLE_PATH, binary=True)
   print("Model loaded.")
 
 if SHOULD_LOAD_LEE_MODEL:
