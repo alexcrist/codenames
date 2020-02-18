@@ -1,13 +1,18 @@
-from nltk import pos_tag
-from pprint import pprint
 import random
 import sys
+from pprint import pprint
 
 from code_master import CodeMaster
-from word import Word
-from models import google_model, all_lee_words, num_lee_words
 from constants import *
+from nltk import pos_tag
 from text_formatters import colorizer_map
+from word import Word
+
+from models import google_model, all_lee_words, num_lee_words
+
+# Set which model to use here
+default_model = google_model
+# default_model = lee_model
 
 def get_color(wordIndex):
     ''' Get the color of a word based on its index in the word list '''
@@ -28,18 +33,40 @@ def generate_words():
 
     words = []
     strings = []
+    blacklist = {
+        "richard", "anthony", "mark", "powell", "ariel", "harris", "tony", "michael",
+        "canberra", "adelaide", "steve", "neil", "robert", "krishna", "kandahar",
+        "zinni", "gary", "john", "allan", "mckenzie", "alexander", "vaughan",
+        "nauru", "martin", "hamid", "glenn", "owen", "hayden", "lockett", "shaun",
+        "mcgrath", "toowoomba", "costello", "davis", "davis", "gillespie", "peter",
+        "cfmeu", "musharraf", "george", "brett", "donald", "kissinger", "woomera",
+        "arafat", "matthew", "giuliani", "austar", "suharto", "strachan", "apra",
+        "ruddock", "colin", "henderson", "hobart", "westpac", "osama", "assa", "asio",
+        "afroz", "hewitt", "rumsfeld", "doesn", "macgill", "gerber", "yasser", "didn",
+        "bora", "ramallah", "ansett", "solomon", "yallourn", "andy", "blake", "howard",
+        "waugh", "shane", "crean", "jason", "bichel", "neville", "friedli", "sarah",
+        "haifa", "doug", "philip", "aedt", "daryl", "stuart", "hopman", "wayne",
+        "rabbani", "illawarra", "pollock", "spencer",
+    }
 
     while len(words) < NUM_WORDS:
-        index = random.randint(0, num_lee_words)
+        index = random.randint(0, num_lee_words-1)
         string = all_lee_words[index]
         tags = pos_tag([string])
 
         is_good_length = len(string) > 3 and len(string) < 10
         is_noun = tags[0][1] == "NN"
         is_dup = string in strings
-        is_in_model = string in google_model.wv
+        # is_in_model = string in google_model.wv
+        is_blacklisted = string in blacklist
 
-        if is_good_length and is_noun and not is_dup and is_in_model:
+        if (
+                is_good_length and
+                is_noun and
+                not is_dup and
+                not is_blacklisted
+                # and is_in_model
+        ):
             color = get_color(len(words))
             words.append(Word(string, color))
             strings.append(string)
@@ -72,7 +99,7 @@ class Game():
             red_words,
             blue_words,
             bad_words,
-            model = google_model
+            model = default_model,
         )
 
     def get_word_strings(self):

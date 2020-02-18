@@ -1,8 +1,10 @@
-from pprint import pprint
 from itertools import combinations
-from gensim.models import KeyedVectors
-import editdistance
 from string import ascii_letters
+
+import editdistance
+from gensim.models import KeyedVectors
+from tqdm import tqdm
+
 
 class CodeMaster:
     ''' A robo code master in the Codenames game '''
@@ -41,7 +43,7 @@ class CodeMaster:
         words = self._red_words + self._blue_words + self._bad_words
 
         word_pairs = []
-        for w1, w2 in self._compute_word_pairs(words):
+        for w1, w2 in tqdm([*self._compute_word_pairs(words)]):
             # TODO: support more than 2 words here
             # Do it by doing all pairwise similarities
             # Then averaging them, and include the std dev of similarities for ref
