@@ -117,16 +117,17 @@ class CodeMaster:
         if len(good_words) == 1:
             word_hint_list = self._most_similar(positive=good_words, topn=5)
             word_hint, sim = word_hint_list[0]
-            return word_hint, 1, sim, (good_words[0],)
+            return word_hint, 1, 0, sim, (good_words[0],)
 
         pairs = [*self._compute_word_pairs(good_words)]
 
         # Find the highest ranking pair from our candidate good pairs.
+        hint_word = None
         do_break = False
         for w1, w2, wp_score, hint_words in self._word_pairs:
             if (w1, w2) in pairs:
-                for hint_word, score in hint_words:
-                    if not self._no_alt_for_hint_word(hint_word, score):
+                for hint_word, hint_score in hint_words:
+                    if not self._no_alt_for_hint_word(hint_word, hint_score):
                         # This means we've found a hint word which ranks
                         # highest in the 2 words we've got
                         # print((w1, w2, wp_score))
@@ -139,8 +140,9 @@ class CodeMaster:
                 break
 
         # Now return the highest ranking hint for those two.
-        # word_hint, score = self._get_highest_ranked_hint(w1, w2)
-        return hint_word, clue_size, score, (w1, w2)
+        if hint_word == None:
+            raise ValueError(f"No Hint word found!")
+        return hint_word, clue_size, wp_score, hint_score, (w1, w2)
 
     def _no_alt_for_hint_word(self, hint_word, score):
         """Check if there is another pair that would be a better clue for hint word."""

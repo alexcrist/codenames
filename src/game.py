@@ -155,8 +155,15 @@ class Game():
     def give_hint(self, player_color):
 
         # Get hint
-        hint_word, num_hinted_words, hint_score, target_words = self.code_master.give_hint(player_color)
-        self.hints.append((hint_word, hint_score, target_words))
+        hint_word, num_hinted_words, target_pair_score, hint_score, target_words = \
+            self.code_master.give_hint(player_color)
+
+        self.hints.append({
+            "hw": hint_word,
+            "tw": target_words,
+            "tw_score": target_pair_score,
+            "hw_score": hint_score,
+        })
 
         # Let user guess
         num_guesses = num_hinted_words + 1
