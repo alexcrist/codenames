@@ -57,7 +57,7 @@ def generate_words():
         is_good_length = len(string) > 3 and len(string) < 10
         is_noun = tags[0][1] == "NN"
         is_dup = string in strings
-        # is_in_model = string in google_model.wv
+        is_in_model = string in google_model.wv
         is_blacklisted = string in blacklist
 
         if (
@@ -65,7 +65,7 @@ def generate_words():
                 is_noun and
                 not is_dup and
                 not is_blacklisted
-                # and is_in_model
+                and is_in_model
         ):
             color = get_color(len(words))
             words.append(Word(string, color))
